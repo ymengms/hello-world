@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany</groupId>
+	<groupId>23a3a92a-57cc-4a31-8f62-180c8d4195ad</groupId>
 	<artifactId>hello-world</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-application</packaging>
@@ -14,24 +14,62 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<app.runtime>4.3.0-20201013</app.runtime>
+		<app.runtime>4.3.0</app.runtime>
 		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
-	</properties>
+
+        <cloudhubOrgId>23a3a92a-57cc-4a31-8f62-180c8d4195ad</cloudhubOrgId>
+        <provider>MC</provider>
+        <target>my-fabric</target>
+
+    </properties>
+
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-				</configuration>
+                <configuration>
+
+                    <runtimeFabricDeployment>
+
+                        <uri>https://anypoint.mulesoft.com</uri>
+                        <muleVersion>${app.runtime}</muleVersion>
+
+                        <!-- <username>${username}</username> -->
+                        <!-- <password>${password}</password> -->
+
+                        <server>Exchange2</server>
+                        <applicationName>${project.artifactId}-${environment}</applicationName>
+                        <environment>${environment}</environment>
+                        <provider>${provider}</provider>
+                        <target>${target}</target>
+
+                        <properties>
+<!--                            <anypoint.platform.client_id>xxx</anypoint.platform.client_id> -->
+<!--                            <anypoint.platform.client_secret>xxx</anypoint.platform.client_secret> -->
+                            <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                            <mule.env>${environment}</mule.env>
+                        </properties>
+
+                        <deploymentSettings>
+
+                            <cpuReserved>100m</cpuReserved>
+                            <cpuMax>1000m</cpuMax>
+                            <memoryReserved>800Mi</memoryReserved>
+                            <memoryMax>999Mi</memoryMax>
+                            <replicationFactor>1</replicationFactor>
+                            <!-- <publicUrl>https://${name}.handsonlab.pro</publicUrl> -->
+                          
+                        </deploymentSettings>
+
+
+                    </runtimeFabricDeployment>
+                </configuration>
+
 			</plugin>
 		</plugins>
 	</build>
@@ -76,5 +114,20 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+        <distributionManagement>
+        <repository>
+            <id>Exchange2</id>
+            <name>Corporate Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${cloudhubOrgId}/maven</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <id>Exchange2</id>
+            <name>Exchange Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${cloudhubOrgId}/maven</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 
 </project>
