@@ -5,7 +5,7 @@
 
 	<groupId>23a3a92a-57cc-4a31-8f62-180c8d4195ad</groupId>
 	<artifactId>hello-world</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>mule-application</packaging>
 
 	<name>hello-world</name>
@@ -16,8 +16,7 @@
 
 		<app.runtime>4.3.0</app.runtime>
 		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
-
-        <cloudhubOrgId>23a3a92a-57cc-4a31-8f62-180c8d4195ad</cloudhubOrgId>
+        <maven.deploy.plugin.version>2.8.1</maven.deploy.plugin.version>           
         <provider>MC</provider>
         <target>my-fabric</target>
 
@@ -71,7 +70,9 @@
                 </configuration>
 
 			</plugin>
+
 		</plugins>
+
 	</build>
 
 	<dependencies>
@@ -115,19 +116,49 @@
         </pluginRepository>
     </pluginRepositories>
 
-        <distributionManagement>
-        <repository>
+    <profiles>
+      
+        <profile>
+            <id>nexus</id>
+            <build>
+                <plugins>
+                        <plugin>
+                           <artifactId>maven-deploy-plugin</artifactId>
+                           <version>${maven.deploy.plugin.version}</version>
+                           <executions>
+                              <execution>
+                                 <id>default-deploy</id>
+                                 <phase>deploy</phase>
+                                 <goals>
+                                    <goal>deploy</goal>
+                                 </goals>
+                              </execution>
+                           </executions>
+                        </plugin>
+                </plugins>
+
+            </build>
+            <distributionManagement>
+                   <repository>
+                      <id>nexus-repo</id>
+                      <url>http://localhost:8081/repository/maven-releases/</url>
+                   </repository>   
+
+                   <snapshotRepository>
+                      <id>nexus-repo</id>
+                      <url>http://localhost:8081/repository/maven-snapshots/</url>
+                   </snapshotRepository>   
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+       <repository>
             <id>Exchange2</id>
             <name>Corporate Repository</name>
-            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${cloudhubOrgId}/maven</url>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${project.groupId}/maven</url>
             <layout>default</layout>
-        </repository>
-        <snapshotRepository>
-            <id>Exchange2</id>
-            <name>Exchange Repository</name>
-            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${cloudhubOrgId}/maven</url>
-        </snapshotRepository>
+       </repository>
     </distributionManagement>
-
 
 </project>

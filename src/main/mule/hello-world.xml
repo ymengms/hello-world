@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</http:listener-config>
 	<flow name="hello-worldFlow" doc:id="03e911cd-391b-4011-836c-5ecda9029834" >
 		<http:listener doc:name="Listener" doc:id="2070cd48-2adb-4bdb-8b58-ea532ef9ef88" config-ref="HTTP_Listener_config" path="/hello"/>
-		<set-payload value="#['Hello World!']" doc:name="Set Payload" doc:id="ae17940e-bd94-452c-9291-500b0881b1c8" />
+		<set-payload value="#['Hello RTF world! This is a ci-cd test.']" doc:name="Set Payload" doc:id="ae17940e-bd94-452c-9291-500b0881b1c8" />
 		<logger level="INFO" doc:name="Logger" doc:id="27acfad0-5477-4a45-bde0-e52d339cd277" message="#[payload]"/>
 	</flow>
 </mule>
